@@ -1,11 +1,11 @@
 var webpack = require("webpack"),
-    path = require("path"),
-    fileSystem = require("fs"),
-    env = require("./utils/env"),
-    CleanWebpackPlugin = require("clean-webpack-plugin"),
-    CopyWebpackPlugin = require("copy-webpack-plugin"),
-    HtmlWebpackPlugin = require("html-webpack-plugin"),
-    WriteFilePlugin = require("write-file-webpack-plugin");
+  path = require("path"),
+  fileSystem = require("fs"),
+  env = require("./utils/env"),
+  CleanWebpackPlugin = require("clean-webpack-plugin"),
+  CopyWebpackPlugin = require("copy-webpack-plugin"),
+  HtmlWebpackPlugin = require("html-webpack-plugin"),
+  WriteFilePlugin = require("write-file-webpack-plugin");
 
 // load the secrets
 var alias = {};
@@ -65,6 +65,10 @@ var options = {
       filename: "index.html",
       chunks: ["index"]
     }),
+    new CopyWebpackPlugin([
+      { from: 'node_modules/mediainfo.js/mediainfo.js', to: 'js' },
+      { from: 'node_modules/mediainfo.js/mediainfo.js.mem', to: 'js' }
+    ]),
     new WriteFilePlugin()
   ]
 };
