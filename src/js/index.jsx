@@ -23,6 +23,11 @@ inputFileEle.addEventListener('change', async event => {
     const data = await parseFile(file);
 
     const prettyJson = inspect(data, {depth: Infinity, breakLength: 120});
+    try {
+      log(`Parsed: ${inspect(parseData(data))}`);
+    }catch (e) {
+      log(e.stack);
+    }
     log(`Data: ${prettyJson}`);
 
     console.log(prettyJson);
