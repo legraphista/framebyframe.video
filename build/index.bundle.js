@@ -12095,10 +12095,10 @@ module.exports = g;
 
 /***/ }),
 
-/***/ "./src/js/data-parsing.js":
-/*!********************************!*\
-  !*** ./src/js/data-parsing.js ***!
-  \********************************/
+/***/ "./src/js/data-parsing.jsx":
+/*!*********************************!*\
+  !*** ./src/js/data-parsing.jsx ***!
+  \*********************************/
 /*! exports provided: parseData */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -12130,7 +12130,7 @@ function parseData(data) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _mediainfo__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./mediainfo */ "./src/js/mediainfo.jsx");
-/* harmony import */ var _data_parsing__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./data-parsing */ "./src/js/data-parsing.js");
+/* harmony import */ var _data_parsing__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./data-parsing */ "./src/js/data-parsing.jsx");
 /* harmony import */ var util__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! util */ "./node_modules/util/util.js");
 /* harmony import */ var util__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(util__WEBPACK_IMPORTED_MODULE_2__);
 /**
@@ -12153,10 +12153,7 @@ inputFileEle.addEventListener('change', async event => {
   log(`Analyzing ${file.name}\n______`);
 
   try {
-    const {
-      data,
-      xml
-    } = await Object(_mediainfo__WEBPACK_IMPORTED_MODULE_0__["parseFile"])(file);
+    const data = await Object(_mediainfo__WEBPACK_IMPORTED_MODULE_0__["parseFile"])(file);
     const prettyJson = Object(util__WEBPACK_IMPORTED_MODULE_2__["inspect"])(data, {
       depth: Infinity,
       breakLength: 120
@@ -12184,7 +12181,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getMediaInfoLib", function() { return getMediaInfoLib; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "parseFile", function() { return parseFile; });
 let miLib;
-const CHUNK_SIZE = 5 * 1024 * 1024;
+const CHUNK_SIZE = 1024 * 1024;
 
 const {
   parseString
@@ -12195,86 +12192,31 @@ async function getMediaInfoLib() {
     return new miLib.MediaInfo();
   }
 
-  while (!MediaInfo) {
+  while (!MediaInfoLib) {
     await new Promise(_ => setTimeout(_, 100));
   }
 
-  return new Promise(_ => {
-    miLib = MediaInfo(function () {
-      console.debug('MediaInfo ready');
-      window['miLib'] = miLib; // debug
-
-      _(new miLib.MediaInfo());
-    });
+  window.miLib = miLib = MediaInfoLib({
+    wasmBinaryFile: 'js/MediaInfoWasm-19.04.wasm'
   });
-}
 
-async function readFileChunk(file, offset, length) {
-  var r = new FileReader();
-  var blob = file.slice(offset, length + offset);
-  const reloadEvent = new Promise(_ => r.onload = _);
-  r.readAsArrayBuffer(blob);
-  const event = await reloadEvent;
-
-  if (event.target.error) {
-    throw event.target.error;
+  while (!miLib.MediaInfo) {
+    await new Promise(_ => setTimeout(_, 100));
   }
 
-  return new Uint8Array(event.target.result);
+  return new miLib.MediaInfo();
 }
-
-async function parseXML(xml) {
-  return new Promise((res, rej) => parseString(xml, function (err, result) {
-    if (err) {
-      return rej(err);
-    }
-
-    return res(result);
-  }));
-}
-
 async function parseFile(file, mi) {
   if (!mi) {
     mi = await getMediaInfoLib();
   }
 
-  const fileSize = file.size;
-  let offset = 0;
-  let seekTo = -1;
-  let lastChunkSize = CHUNK_SIZE;
-  mi.open_buffer_init(fileSize, offset);
-
-  while (true) {
-    const chunk = await readFileChunk(file, offset, lastChunkSize);
-    lastChunkSize = chunk.length;
-    const state = mi.open_buffer_continue(chunk, chunk.length);
-    const seekToLow = mi.open_buffer_continue_goto_get_lower();
-    const seekToHigh = mi.open_buffer_continue_goto_get_upper();
-
-    if (seekToLow === -1 && seekToHigh === -1) {
-      seekTo = -1;
-    } else if (seekToLow < 0) {
-      seekTo = seekToLow + 2 ** 32 + seekToHigh * 2 ** 32;
-    } else {
-      seekTo = seekToLow + seekToHigh * 2 ** 32;
-    }
-
-    if (seekTo === -1) {
-      offset += chunk.length;
-    } else {
-      offset = seekTo;
-      mi.open_buffer_init(fileSize, seekTo);
-    }
-
-    if (state & 0x08) {
-      const result = mi.inform();
-      mi.close();
-      return {
-        data: await parseXML(result),
-        xml: result
-      };
-    }
-  }
+  mi.Option('Complete', '1');
+  mi.Option('Output', 'JSON');
+  mi.Option('Inform', 'JSON');
+  await new Promise(_ => mi.Open(file, _));
+  const data = mi.Inform();
+  return JSON.parse(data);
 }
 
 /***/ }),

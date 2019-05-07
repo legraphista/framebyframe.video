@@ -20,7 +20,7 @@ inputFileEle.addEventListener('change', async event => {
 
   log(`Analyzing ${file.name}\n______`);
   try {
-    const {data, xml} = await parseFile(file);
+    const data = await parseFile(file);
 
     const prettyJson = inspect(data, {depth: Infinity, breakLength: 120});
     log(`Data: ${prettyJson}`);

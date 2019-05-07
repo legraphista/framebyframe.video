@@ -2794,9 +2794,9 @@ media-typer@0.3.0:
   resolved "https://registry.yarnpkg.com/media-typer/-/media-typer-0.3.0.tgz#8710d7af0aa626f8fffa1ce00168545263255748"
   integrity sha1-hxDXrwqmJvj/+hzgAWhUUmMlV0g=
 
-"mediainfo.js@git+https://github.com/buzz/mediainfo.js.git":
-  version "0.0.2"
-  resolved "git+https://github.com/buzz/mediainfo.js.git#f2aa12136953dfb8489ca514c9d3178a132d6567"
+"mediainfo.js@git+https://github.com/legraphista/mediainfo.js.git":
+  version "1.0.0"
+  resolved "git+https://github.com/legraphista/mediainfo.js.git#7f2147a9c31c743ef64ced00118051ca726414f9"
 
 mem@^4.0.0:
   version "4.3.0"

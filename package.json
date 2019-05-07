@@ -29,7 +29,7 @@
     "@babel/plugin-proposal-class-properties": "^7.3.4",
     "@babel/plugin-proposal-decorators": "^7.3.0",
     "lodash.once": "^4.1.1",
-    "mediainfo.js": "git+https://github.com/buzz/mediainfo.js.git",
+    "mediainfo.js": "git+https://github.com/legraphista/mediainfo.js.git",
     "mobx": "^5.9.0",
     "mobx-react": "^5.4.3",
     "mobx-utils": "^5.2.0",

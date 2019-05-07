@@ -7,6 +7,8 @@ var webpack = require("webpack"),
   HtmlWebpackPlugin = require("html-webpack-plugin"),
   WriteFilePlugin = require("write-file-webpack-plugin");
 
+const mediaInfoPaths = require('mediainfo.js/paths');
+
 // load the secrets
 var alias = {};
 
@@ -66,8 +68,8 @@ var options = {
       chunks: ["index"]
     }),
     new CopyWebpackPlugin([
-      { from: 'node_modules/mediainfo.js/mediainfo.js', to: 'js' },
-      { from: 'node_modules/mediainfo.js/mediainfo.js.mem', to: 'js' }
+      { from: mediaInfoPaths.WASM.js, to: 'js' },
+      { from: mediaInfoPaths.WASM.wasm, to: 'js' }
     ]),
     new WriteFilePlugin()
   ]
