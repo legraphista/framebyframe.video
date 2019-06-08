@@ -25,6 +25,8 @@ export async function getMediaInfoLib() {
 }
 
 export async function parseFile(file, mi) {
+
+  console.log('parsing', file);
   if (!mi) {
     mi = await getMediaInfoLib();
   }
@@ -35,5 +37,22 @@ export async function parseFile(file, mi) {
   await new Promise(_ => mi.Open(file, _));
 
   const data = mi.Inform();
+  console.log('done parsing', file, JSON.parse(data));
+
   return JSON.parse(data);
 }
+
+export function findVideoInData(data) {
+  const { media } = data;
+  if (!media) return null;
+
+  const { track } = media;
+  if (!track) return null;
+
+  return track.find(t => t["@type"] === 'Video')
+}
+
+export function isFileVideo(data) {
+  return !!findVideoInData(data);
+}
+

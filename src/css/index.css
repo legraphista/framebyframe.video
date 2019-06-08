@@ -1,5 +1,39 @@
-.DropZone {
-    width: 100%;
-    height: 100%;
-    position: absolute;
+
+
+.app {
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+    flex-direction: column;
 }
+
+input[type="file"] {
+    display: none;
+}
+
+.custom-file-upload {
+    border: 1px solid #ccc;
+    padding: 6px 12px;
+    cursor: pointer;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.processing {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.big {
+    height: 100%;
+    font-size: 250%;
+}
+
+body {
+    background: #0b0e1b;
+    color: #dfe1f0;
+}
+

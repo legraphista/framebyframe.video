@@ -36,7 +36,6 @@
     "prop-types": "^15.7.2",
     "react": "^16.8.4",
     "react-dom": "^16.8.4",
-    "react-drop-zone": "^3.0.6",
     "react-tooltip": "^3.10.0",
     "xml2js": "^0.4.19"
   }

@@ -1,5 +1,5 @@
-import {observable, runInAction} from 'mobx';
-import {parseFile} from './mediainfo';
+import {observable, runInAction, computed} from 'mobx';
+import {isFileVideo, parseFile} from './mediainfo';
 
 class Store {
 
@@ -7,8 +7,15 @@ class Store {
   @observable processing = false;
   @observable data = null;
 
+  @computed get isVideo() {
+    if (!this.data) return false;
+
+    return isFileVideo(this.data);
+  }
+
   setFile = async (file) => {
     runInAction(() => {
+      this.data = null;
       this.file = file;
       this.processing = true;
     });
