@@ -35,5 +35,7 @@ input[type="file"] {
 body {
     background: #0b0e1b;
     color: #dfe1f0;
+
+    overflow: hidden;
 }
 
