@@ -3,7 +3,6 @@ import {hot} from "react-hot-loader";
 import {observer} from 'mobx-react';
 import ReactTooltip from 'react-tooltip'
 import {FileStore} from './store';
-import 'react-drop-zone/dist/styles.css'
 import '../css/index.css'
 import MediaShow from './components/media-view';
 
